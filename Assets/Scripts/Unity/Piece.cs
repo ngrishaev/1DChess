@@ -1,12 +1,15 @@
 using System;
 using Game.Pieces;
 using UnityEngine;
+using Color = Game.Pieces.Color;
 
 namespace Unity
 {
     public class Piece : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private UnityEngine.Color _whiteColor;
+        [SerializeField] private UnityEngine.Color _blackColor;
 
         [Header("Resources")]
         [SerializeField] private Sprite _king;
@@ -25,10 +28,8 @@ namespace Unity
                 Rook => _rook,
                 _ => throw new ArgumentOutOfRangeException($"Cant find sprite for {piece.GetType()} piece")
             };
-        }
 
-        public void UpdateState()
-        {
+            _spriteRenderer.color = piece.Color == Color.White ? _whiteColor : _blackColor;
         }
 
         public void PlaceAt(float xPos)
