@@ -17,21 +17,33 @@ namespace Unity
 
         private void Start()
         {
-            var player1 = Instantiate(_player);
-            var player2 = Instantiate(_player);
-            _game = new GameModel(11, player1, player2);
-
-            var inputService = Instantiate(_inputService);
-            inputService.Construct(_mainCamera);
-            
-            var board = Instantiate(_board, Vector3.zero, Quaternion.identity);
-            board.Construct(_game.Board, _inputService);
-            
-            player1.Construct(_game.Board.Whites, board, _game.Board, inputService, "p1");
-            player2.Construct(_game.Board.Blacks, board, _game.Board, inputService, "p2");
+            var board = Compose();
 
             _game.OnMoveFinished += board.UpdateState;
             _game.Run();
+        }
+
+        private Board Compose()
+        {
+            var inputService = Instantiate(_inputService);
+            inputService.Construct(_mainCamera);
+
+            var boardModel = new Game.Board(11);
+            
+            var board = Instantiate(_board, Vector3.zero, Quaternion.identity);
+            board.Construct(boardModel, _inputService);
+            
+            var player1 = Instantiate(_player);
+            player1.Construct(boardModel.Whites, boardModel.Blacks, boardModel, board, inputService, "p1");
+            
+            var player2 = Instantiate(_player);
+            player2.Construct(boardModel.Blacks, boardModel.Whites, boardModel, board, inputService, "p2");
+
+            var game = new GameModel(boardModel, player1, player2);
+            
+            game.Run();
+
+            return board;
         }
     }
 }

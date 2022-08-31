@@ -15,9 +15,9 @@ namespace Game
         private IPlayer CurrentPlayer => _players[_movesCount % _players.Length];
         public Board Board { get; }
 
-        public Game(int size, IPlayer p1, IPlayer p2)
+        public Game(Board board, IPlayer p1, IPlayer p2)
         {
-            Board = new Board(size);
+            Board = board;
             _players[0] = p1;
             _players[1] = p2;
         }

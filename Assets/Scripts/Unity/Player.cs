@@ -17,15 +17,19 @@ namespace Unity
         
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
         private Maybe<Game.Pieces.Piece> _selectedPiece = Maybe<Game.Pieces.Piece>.No();
+        private List<Game.Pieces.Piece> _playerPieces;
+        private List<Game.Pieces.Piece> _enemyPieces;
 
-        public void Construct(List<Game.Pieces.Piece> pieces,
-            Board board,
+        public void Construct(List<Game.Pieces.Piece> playerPieces,
+            List<Game.Pieces.Piece> enemyPieces,
             Game.Board boardModel,
+            Board board,
             InputService inputService, string n)
         {
+            _playerPieces = playerPieces;
+            _enemyPieces = enemyPieces;
             _board = board;
             _boardModel = boardModel;
-            _pieces = pieces;
             name = n;
             inputService.OnTap += TapHandler;
         }
