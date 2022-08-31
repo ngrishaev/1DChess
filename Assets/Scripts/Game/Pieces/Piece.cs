@@ -24,15 +24,9 @@ namespace Game.Pieces
 
         public abstract bool CanMoveTo(int newPosition);
 
-        public void MoveTo(int position)
-        {
-            Position = Maybe<int>.Yes(position);
-        }
+        public void MoveTo(int position) => Position = Maybe<int>.Yes(position);
 
-        public void Capture()
-        {
-            Position = Maybe<int>.No();
-        }
+        public void Capture() => Position = Maybe<int>.No();
     }
     
     public enum Color

@@ -33,13 +33,7 @@ namespace Game
             Pieces.AddRange(Blacks);
         }
 
-        public bool IsAnyAt(int position) => 
-            Pieces.Any(piece => piece.Position.Value == position);
 
-        public Maybe<Piece> GetPiece(int position) =>
-            IsAnyAt(position)
-                ? Maybe<Piece>.Yes(Pieces.First(piece => piece.Position.Value == position))
-                : Maybe<Piece>.No();
 
         public IEnumerable<int> GetAvailableMovesFor(Piece piece)
         {

@@ -23,33 +23,19 @@ namespace Unity
         private InputService _inputService;
         private int _boardSizeInCells;
 
-        private Game.Board _board;
+        private Game.Board _boardModel;
         private Bounds _bounds;
         
         public void Construct(Game.Board board, InputService inputService)
         {
-            _board = board;
+            _boardModel = board;
             _inputService = inputService;
             
-            CreateCells(_board.Size);
+            CreateCells(_boardModel.Size);
             CreatePieces(board.Pieces);
-
-            _inputService.OnTap += TapHandler;
         }
 
-        private void TapHandler(Coordinate tap)
-        {
-            foreach (Cell cell in _cells.Where(cell => cell.IsContains(tap)))
-            {
-                Maybe<Game.Pieces.Piece> pieceAtPosition = _board.GetPiece(cell.Position);
-                
-                if(pieceAtPosition.Exists == false)
-                    continue;
-
-                IEnumerable<int> movePositions = _board.GetAvailableMovesFor(pieceAtPosition.Value);
-                Highlight(movePositions.ToList());
-            }
-        }
+        private void HighlightMovesFor(Piece piece) => Highlight(_boardModel.GetAvailableMovesFor(piece.PieceData).ToList());
 
         private void Highlight(List<int> positions)
         {
@@ -65,9 +51,16 @@ namespace Unity
                 piece.Construct(pieceData);
                 
                 piece.PlaceAt(CellToWorldPos(pieceData.Position.Value));
+
+                piece.OnSelect += PieceSelectionHandler;
                 
                 _pieces.Add(piece);
             }
+        }
+
+        private void PieceSelectionHandler(Piece selectedPiece)
+        {
+            HighlightMovesFor(selectedPiece);
         }
 
         private void CreateCells(int size)
@@ -86,9 +79,26 @@ namespace Unity
         }
 
 
+        public Maybe<Piece> GetPiece(Coordinate tap)
+        {
+            if(IsOnBoard(tap) == false)
+                return Maybe<Piece>.No();
+
+            var tapTilePosition = WorldPosToCell(tap.World.x);
+            
+            if(IsAnyAt(tapTilePosition) == false)
+                return Maybe<Piece>.No();
+            
+            return Maybe<Piece>.Yes(_pieces.First( piece => piece.PieceData.Position.ValueEquals(tapTilePosition)));
+        }
+
         public bool IsOnBoard(Coordinate coordinate) => _bounds.IsOverlapInZ(coordinate.World);
+
         public int WorldPosToCell(float xPos) => Mathf.RoundToInt(0.5f * (_boardSizeInCells - 1) + xPos / _cellPrefab.Width);
+
         private float CellToWorldPos(int cell) => _cellPrefab.Width * (0.5f + cell - (_boardSizeInCells / 2f));
+
+        private bool IsAnyAt(int position) => _pieces.Any(piece => piece.IsAt(position));
 
         public void UpdateState()
         {

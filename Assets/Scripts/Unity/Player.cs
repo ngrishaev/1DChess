@@ -17,9 +17,10 @@ namespace Unity
         private Game.Board _boardModel;
 
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
-        private Maybe<Game.Pieces.Piece> _selectedPiece = Maybe<Game.Pieces.Piece>.No();
+        private Maybe<Piece> _selectedPiece = Maybe<Piece>.No();
         private List<Game.Pieces.Piece> _playerPieces;
         private List<Game.Pieces.Piece> _enemyPieces;
+        private bool _waitingForInput = false;
 
         public void Construct(List<Game.Pieces.Piece> playerPieces,
             List<Game.Pieces.Piece> enemyPieces,
@@ -38,11 +39,15 @@ namespace Unity
 
         public Task<GameAction> GetInput()
         {
+            _waitingForInput = true;
             return _inputTcs.Task;
         }
 
         private void TapHandler(Coordinate tapCoordinate)
         {
+            if (_waitingForInput == false)
+                return;
+            
             if (_board.IsOnBoard(tapCoordinate) == false)
                 return;
 
@@ -54,27 +59,30 @@ namespace Unity
 
         private void HandleSelectionStart(Coordinate tapCoordinate)
         {
-            var selectedPiece = _boardModel.GetPiece(_board.WorldPosToCell(tapCoordinate.World.x));
+            Maybe<Piece> selectedPiece = _board.GetPiece(tapCoordinate);
             
             if(selectedPiece.Exists == false)
                 return;
             
-            if(_playerPieces.Any(piece => piece == selectedPiece.Value) == false)
+            if(_playerPieces.Any(piece => piece == selectedPiece.Value.PieceData) == false)
                 return;
-
+            
             _selectedPiece = selectedPiece;
+            _selectedPiece.Value.Select();
             Debug.Log($"Selected piece for {Name}");
         }
 
         private void HandleSelectionEnd(Coordinate tapCoordinate)
         {
-            var selectedTile = _board.WorldPosToCell(tapCoordinate.World.x);
-            if(_selectedPiece.Value.CanMoveTo(selectedTile))
+            int selectedTile = _board.WorldPosToCell(tapCoordinate.World.x);
+            
+            if(_selectedPiece.Value.PieceData.CanMoveTo(selectedTile))
             {
-                _inputTcs.SetResult(new Move(_selectedPiece.Value, selectedTile));
-                _selectedPiece = Maybe<Game.Pieces.Piece>.No();
-                Debug.Log($"Clear selection for {name}");
+                _waitingForInput = false;
+                _inputTcs.SetResult(new Move(_selectedPiece.Value.PieceData, selectedTile));
+                _selectedPiece = Maybe<Piece>.No();
                 _inputTcs = new TaskCompletionSource<GameAction>(); 
+                Debug.Log($"Clear selection for {name}");
             }
         }
     }
