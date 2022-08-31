@@ -11,10 +11,11 @@ namespace Unity
 {
     public class Player : MonoBehaviour, IPlayer
     {
+        public string Name { get; private set; }
         private List<Game.Pieces.Piece> _pieces;
         private Board _board;
         private Game.Board _boardModel;
-        
+
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
         private Maybe<Game.Pieces.Piece> _selectedPiece = Maybe<Game.Pieces.Piece>.No();
         private List<Game.Pieces.Piece> _playerPieces;
@@ -24,13 +25,14 @@ namespace Unity
             List<Game.Pieces.Piece> enemyPieces,
             Game.Board boardModel,
             Board board,
-            InputService inputService, string n)
+            InputService inputService,
+            string name)
         {
             _playerPieces = playerPieces;
             _enemyPieces = enemyPieces;
             _board = board;
             _boardModel = boardModel;
-            name = n;
+            Name = name;
             inputService.OnTap += TapHandler;
         }
 
@@ -57,11 +59,11 @@ namespace Unity
             if(selectedPiece.Exists == false)
                 return;
             
-            if(_pieces.Any(piece => piece == selectedPiece.Value) == false)
+            if(_playerPieces.Any(piece => piece == selectedPiece.Value) == false)
                 return;
 
             _selectedPiece = selectedPiece;
-            Debug.Log($"Selected piece for {name}");
+            Debug.Log($"Selected piece for {Name}");
         }
 
         private void HandleSelectionEnd(Coordinate tapCoordinate)

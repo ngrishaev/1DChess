@@ -12,7 +12,7 @@ namespace Game
         private IPlayer[] _players = new IPlayer[2];
         private int _movesCount = 0;
 
-        private IPlayer CurrentPlayer => _players[_movesCount % _players.Length];
+        public IPlayer CurrentPlayer => _players[_movesCount % _players.Length];
         public Board Board { get; }
 
         public Game(Board board, IPlayer p1, IPlayer p2)
@@ -40,6 +40,8 @@ namespace Game
 
     public interface IPlayer
     {
+        string Name { get; }
+        
         Task<GameAction> GetInput();
     }
 }

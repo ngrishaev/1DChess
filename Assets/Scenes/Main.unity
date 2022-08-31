@@ -239,6 +239,7 @@ MonoBehaviour:
   _mainCamera: {fileID: 1562622661}
   _board: {fileID: 494791192568754194, guid: 1d44c360c1de366459ebb1c78053d8db, type: 3}
   _player: {fileID: 5559625570036218802, guid: 95af1912055ed264787f65a893dd61be, type: 3}
+  _hud: {fileID: 3826263271326321871, guid: 44c6ae6afb02e734b931a45f995282f4, type: 3}
 --- !u!20 &1562622661 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 8837261587522218651, guid: 858c0aee524f0744f8beb7f5572b8d30, type: 3}

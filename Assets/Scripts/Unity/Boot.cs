@@ -1,3 +1,4 @@
+using System;
 using Unity.Services;
 using UnityEngine;
 using GameModel = Game.Game;
@@ -12,18 +13,27 @@ namespace Unity
         [Header("Prefabs")]
         [SerializeField] private Board _board;
         [SerializeField] private Player _player;
+        [SerializeField] private Hud _hud;
+        
         
         private GameModel _game;
+        private Board _boardCreated;
 
         private void Start()
         {
-            var board = Compose();
+             Compose();
 
-            _game.OnMoveFinished += board.UpdateState;
+            _game.OnMoveFinished += UpdateHandler;
             _game.Run();
         }
 
-        private Board Compose()
+        private void UpdateHandler()
+        {
+            _boardCreated.UpdateState();
+            _hud.UpdateState();
+        }
+
+        private void Compose()
         {
             var inputService = Instantiate(_inputService);
             inputService.Construct(_mainCamera);
@@ -32,18 +42,18 @@ namespace Unity
             
             var board = Instantiate(_board, Vector3.zero, Quaternion.identity);
             board.Construct(boardModel, _inputService);
-            
+            _boardCreated = board;
+
             var player1 = Instantiate(_player);
-            player1.Construct(boardModel.Whites, boardModel.Blacks, boardModel, board, inputService, "p1");
+            player1.Construct(boardModel.Whites, boardModel.Blacks, boardModel, board, inputService, "White");
             
             var player2 = Instantiate(_player);
-            player2.Construct(boardModel.Blacks, boardModel.Whites, boardModel, board, inputService, "p2");
+            player2.Construct(boardModel.Blacks, boardModel.Whites, boardModel, board, inputService, "Black");
 
-            var game = new GameModel(boardModel, player1, player2);
-            
-            game.Run();
+            _game = new GameModel(boardModel, player1, player2);
 
-            return board;
+            _hud = Instantiate(_hud);
+            _hud.Construct(_game);
         }
     }
 }
