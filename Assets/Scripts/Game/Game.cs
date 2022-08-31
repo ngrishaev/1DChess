@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Game.Actions;
+using UnityEngine;
 
 namespace Game
 {
     public class Game
     {
+        public event Action OnMoveFinished;
+        
         private IPlayer[] _players = new IPlayer[2];
         private int _movesCount = 0;
 
@@ -20,12 +24,17 @@ namespace Game
 
         public async void Run()
         {
-            while (true)
+            while (_movesCount < 100)
             {
-                GameAction gameInput = await CurrentPlayer.GetInput();
-                gameInput.Process();
+                Debug.Log("awaiting move");
+                GameAction playerAction = await CurrentPlayer.GetInput();
+                Debug.Log("Move found");
+                playerAction.Do();
                 _movesCount++;
+                OnMoveFinished?.Invoke();
             }
+
+            Debug.Log("Moves count > 100");
         }
     }
 

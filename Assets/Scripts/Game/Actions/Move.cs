@@ -13,7 +13,7 @@ namespace Game.Actions
             _position = position;
         }
         
-        public override void Process()
+        public override void Do()
         {
             _piece.MoveTo(_position);
         }
@@ -30,7 +30,7 @@ namespace Game.Actions
             _forCapturing = forCapturing;
         }
         
-        public override void Process()
+        public override void Do()
         {
             _forCapturing.Capture();
         }
@@ -38,6 +38,6 @@ namespace Game.Actions
 
     public abstract class GameAction
     {
-        public abstract void Process();
+        public abstract void Do();
     }
 }

@@ -26,5 +26,14 @@ namespace Unity
                 _ => throw new ArgumentOutOfRangeException($"Cant find sprite for {piece.GetType()} piece")
             };
         }
+
+        public void UpdateState()
+        {
+        }
+
+        public void PlaceAt(float xPos)
+        {
+            transform.localPosition = new Vector3(xPos, 0, 0);
+        }
     }
 }

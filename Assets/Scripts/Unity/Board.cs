@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common;
@@ -38,7 +39,7 @@ namespace Unity
 
         private void TapHandler(Coordinate tap)
         {
-            foreach (var cell in _cells.Where(cell => cell.IsContains(tap)))
+            foreach (Cell cell in _cells.Where(cell => cell.IsContains(tap)))
             {
                 Maybe<Game.Pieces.Piece> pieceAtPosition = _board.GetPiece(cell.Position);
                 
@@ -61,8 +62,9 @@ namespace Unity
             foreach (var pieceData in boardPieces)
             {
                 var piece = Instantiate(_piecePrefab, _piecesRoot);
-                piece.transform.localPosition = new Vector3(CellToWorldPos(pieceData.Position.Value), 0, 0);
                 piece.Construct(pieceData);
+                
+                piece.PlaceAt(CellToWorldPos(pieceData.Position.Value));
                 
                 _pieces.Add(piece);
             }
@@ -87,5 +89,14 @@ namespace Unity
         public bool IsOnBoard(Coordinate coordinate) => _bounds.IsOverlapInZ(coordinate.World);
         public int WorldPosToCell(float xPos) => Mathf.RoundToInt(0.5f * (_boardSizeInCells - 1) + xPos / _cellPrefab.Width);
         private float CellToWorldPos(int cell) => _cellPrefab.Width * (0.5f + cell - (_boardSizeInCells / 2f));
+
+        public void UpdateState()
+        {
+            foreach (var piece in _pieces)
+            {
+                if(piece.PieceData.Position.Exists)
+                    piece.PlaceAt(CellToWorldPos(piece.PieceData.Position.Value));
+            }
+        }
     }
 }
