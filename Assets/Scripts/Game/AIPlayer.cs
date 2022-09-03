@@ -41,7 +41,7 @@ namespace Game
                         Maybe<Piece> pieceAtPosition = GetPieceAtPosition(position);
                         // TODO: дубляж кода
                         GameAction move = pieceAtPosition.Exists
-                            ? new Capture(pieceAtPosition.Value, pieceAtPosition.Value)
+                            ? new Capture(piece, pieceAtPosition.Value)
                             : new Move(piece, position);
                         aggregate.Add(move);
                         return aggregate;
