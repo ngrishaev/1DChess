@@ -104,8 +104,10 @@ namespace Unity
         {
             foreach (var piece in _pieces)
             {
-                if(piece.PieceData.Position.Exists)
+                if (piece.PieceData.Position.Exists)
                     piece.PlaceAt(CellToWorldPos(piece.PieceData.Position.Value));
+                else
+                    piece.Capture();
             }
         }
     }

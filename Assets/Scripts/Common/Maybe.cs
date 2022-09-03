@@ -4,7 +4,13 @@ namespace Common
 {
     public class Maybe<T>
     {
-        public T Value { get; }
+        private T _value;
+        
+        public T Value
+        {
+            get => Exists ? _value : throw new InvalidOperationException("Can't get non existing value");
+            private set => _value = value;
+        }
         public bool Exists { get; }
         
         private Maybe(T value, bool exists)

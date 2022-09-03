@@ -1,4 +1,5 @@
 using System;
+using Game;
 using Unity.Services;
 using UnityEngine;
 using GameModel = Game.Game;
@@ -46,9 +47,8 @@ namespace Unity
 
             var player1 = Instantiate(_player);
             player1.Construct(boardModel.Whites, boardModel.Blacks, boardModel, board, inputService, "White");
-            
-            var player2 = Instantiate(_player);
-            player2.Construct(boardModel.Blacks, boardModel.Whites, boardModel, board, inputService, "Black");
+
+            var player2 = new AIPlayer(boardModel, boardModel.Blacks, "Black");
 
             _game = new GameModel(boardModel, player1, player2);
 

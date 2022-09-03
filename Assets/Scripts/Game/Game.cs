@@ -12,6 +12,7 @@ namespace Game
         private IPlayer[] _players = new IPlayer[2];
         private int _movesCount = 0;
 
+        // TODO_L: Do not liek
         public IPlayer CurrentPlayer => _players[_movesCount % _players.Length];
         public Board Board { get; }
 
@@ -26,10 +27,9 @@ namespace Game
         {
             while (_movesCount < 100)
             {
-                Debug.Log("awaiting move");
                 GameAction playerAction = await CurrentPlayer.GetInput();
-                Debug.Log("Move found");
                 playerAction.Do();
+                Debug.Log(playerAction.ToString());
                 _movesCount++;
                 OnMoveFinished?.Invoke();
             }

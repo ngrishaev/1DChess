@@ -39,7 +39,10 @@ namespace Unity
 
         public Task<GameAction> GetInput()
         {
+            // TODO_L: возможно, вместо була стоит использовать inputTcs
             _waitingForInput = true;
+            _selectedPiece = Maybe<Piece>.No();
+            _inputTcs = new TaskCompletionSource<GameAction>(); 
             return _inputTcs.Task;
         }
 
@@ -74,14 +77,17 @@ namespace Unity
 
         private void HandleSelectionEnd(Coordinate tapCoordinate)
         {
-            int selectedTile = _board.WorldPosToCell(tapCoordinate.World.x);
+            var selectedTile = _board.WorldPosToCell(tapCoordinate.World.x);
+            var pieceOnTile = _board.GetPiece(tapCoordinate);
             
             if(_selectedPiece.Value.PieceData.CanMoveTo(selectedTile))
             {
                 _waitingForInput = false;
-                _inputTcs.SetResult(new Move(_selectedPiece.Value.PieceData, selectedTile));
-                _selectedPiece = Maybe<Piece>.No();
-                _inputTcs = new TaskCompletionSource<GameAction>(); 
+
+                GameAction move = pieceOnTile.Exists
+                    ? new Capture(_selectedPiece.Value.PieceData, pieceOnTile.Value.PieceData)
+                    : new Move(_selectedPiece.Value.PieceData, selectedTile);
+                _inputTcs.SetResult(move);
                 Debug.Log($"Clear selection for {name}");
             }
         }

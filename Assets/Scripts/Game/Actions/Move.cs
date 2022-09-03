@@ -17,27 +17,20 @@ namespace Game.Actions
         {
             _piece.MoveTo(_position);
         }
-    }
 
-    public class Capture : GameAction
-    {
-        private readonly Piece _actor;
-        private readonly Piece _forCapturing;
-
-        public Capture(Piece actor, Piece forCapturing)
-        {
-            _actor = actor;
-            _forCapturing = forCapturing;
-        }
-        
-        public override void Do()
-        {
-            _forCapturing.Capture();
-        }
+        protected override string StringRepresentation() => 
+            $"{_piece.Color} colored ${_piece.GetType().Name} moves to {_position} position";
     }
 
     public abstract class GameAction
     {
         public abstract void Do();
+
+        public sealed override string ToString()
+        {
+            return StringRepresentation();
+        }
+
+        protected abstract string StringRepresentation();
     }
 }

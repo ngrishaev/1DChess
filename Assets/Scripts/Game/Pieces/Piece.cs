@@ -8,6 +8,7 @@ namespace Game.Pieces
     {
         public Maybe<int> Position { get; private set; }
         public Color Color { get; }
+        public bool Captured => Position.Exists == false;
         
         protected readonly List<Piece> Pieces;
 

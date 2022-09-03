@@ -11,8 +11,8 @@ namespace Game.Pieces
 
         public override bool CanMoveTo(int newPosition)
         {
-            return HaveAccessTo(newPosition)
-                   && Pieces.All(piece => piece.Position.Value != newPosition && piece.Position.Value != newPosition);
+            return HaveAccessTo(newPosition) &&
+                   Pieces.All(piece => !(piece.Position.ValueEquals(newPosition) && piece.Color == Color)); 
         }
 
         private bool HaveAccessTo(int newPosition)
@@ -26,6 +26,9 @@ namespace Game.Pieces
 
         private bool InBetween(Piece piece, int firstPosition, int secondPosition)
         {
+            if (piece.Captured)
+                return false;
+            
             var (min, max) = firstPosition < secondPosition
                 ? (firstPosition, secondPosition)
                 : (secondPosition, firstPosition);
