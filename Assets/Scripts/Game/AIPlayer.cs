@@ -27,6 +27,7 @@ namespace Game
             var chosenAction = allMoves[Random.Range(0, allMoves.Count)];
             return Task.FromResult(chosenAction);
         }
+        public bool KingCaptured() => _pieces.Any(piece => piece is King && piece.Captured);
 
         private List<GameAction> GetAllMoves() => _pieces
             .Where(piece => !piece.Captured)

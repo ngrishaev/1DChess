@@ -8,40 +8,46 @@ namespace Game
     public class Game
     {
         public event Action OnMoveFinished;
+        public event Action<IPlayer> OnGameFinished;
         
-        private IPlayer[] _players = new IPlayer[2];
+        private IPlayer _currentPlayer;
+        private IPlayer _nextPlayer;
         private int _movesCount = 0;
-
-        // TODO_L: Do not liek
-        public IPlayer CurrentPlayer => _players[_movesCount % _players.Length];
         public Board Board { get; }
+        public IPlayer CurrentPlayer => _currentPlayer;
 
         public Game(Board board, IPlayer p1, IPlayer p2)
         {
             Board = board;
-            _players[0] = p1;
-            _players[1] = p2;
+            _currentPlayer = p1;
+            _nextPlayer = p2;
         }
 
         public async void Run()
         {
             while (_movesCount < 100)
             {
-                GameAction playerAction = await CurrentPlayer.GetInput();
+                GameAction playerAction = await _currentPlayer.GetInput();
                 playerAction.Do();
                 Debug.Log(playerAction.ToString());
-                _movesCount++;
+                
                 OnMoveFinished?.Invoke();
+                
+                SwitchPlayers();
             }
+            OnGameFinished?.Invoke(_nextPlayer);
 
             Debug.Log("Moves count > 100");
         }
+
+        private void SwitchPlayers() => 
+            (_currentPlayer, _nextPlayer) = (_nextPlayer, _currentPlayer);
     }
 
     public interface IPlayer
     {
         string Name { get; }
-        
         Task<GameAction> GetInput();
+        bool KingCaptured();
     }
 }

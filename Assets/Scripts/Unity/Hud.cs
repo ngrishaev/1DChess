@@ -1,3 +1,4 @@
+using Game;
 using TMPro;
 using UnityEngine;
 
@@ -12,8 +13,5 @@ public class Hud : MonoBehaviour
         _game = gameModel;
     }
 
-    public void UpdateState()
-    {
-        _playerIndicator.text = "Current player: " + _game.CurrentPlayer.Name;
-    }
+    public void UpdateState() => _playerIndicator.text = "Current player: " + _game.CurrentPlayer.Name;
 }

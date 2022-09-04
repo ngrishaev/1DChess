@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Common;
 using Game;
 using Game.Actions;
+using Game.Pieces;
 using Unity.Services;
 using UnityEngine;
 
@@ -45,6 +46,10 @@ namespace Unity
             _inputTcs = new TaskCompletionSource<GameAction>(); 
             return _inputTcs.Task;
         }
+
+        // TODO: Дубляж кода
+        // TODO: в любом наборе фигур должен быть король
+        public bool KingCaptured() => _pieces.Any(piece => piece is King && piece.Captured);
 
         private void TapHandler(Coordinate tapCoordinate)
         {
