@@ -22,12 +22,19 @@ namespace Unity
 
         private void Start()
         {
-             Compose();
+            // TODO: отрефакторить загрузку игры
+            Compose();
 
             _game.OnMoveFinished += UpdateHandler;
+            _game.OnGameFinished += FinishHandler;
             _game.Run();
         }
 
+        private void FinishHandler(IPlayer winner)
+        {
+            _hud.GameEnd(winner);
+        }
+        
         private void UpdateHandler()
         {
             _boardCreated.UpdateState();

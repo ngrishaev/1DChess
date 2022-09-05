@@ -25,7 +25,7 @@ namespace Game
 
         public async void Run()
         {
-            while (_movesCount < 100)
+            while (_movesCount < 100 && !_currentPlayer.KingCaptured())
             {
                 GameAction playerAction = await _currentPlayer.GetInput();
                 playerAction.Do();

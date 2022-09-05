@@ -13,13 +13,12 @@ namespace Unity
     public class Player : MonoBehaviour, IPlayer
     {
         public string Name { get; private set; }
-        private List<Game.Pieces.Piece> _pieces;
         private Board _board;
         private Game.Board _boardModel;
 
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
         private Maybe<Piece> _selectedPiece = Maybe<Piece>.No();
-        private List<Game.Pieces.Piece> _playerPieces;
+        private List<Game.Pieces.Piece> _playerPieces; // TODO: наверное это Set? Возможно, вообще отдельный класс
         private List<Game.Pieces.Piece> _enemyPieces;
         private bool _waitingForInput = false;
 
@@ -40,7 +39,6 @@ namespace Unity
 
         public Task<GameAction> GetInput()
         {
-            // TODO_L: возможно, вместо була стоит использовать inputTcs
             _waitingForInput = true;
             _selectedPiece = Maybe<Piece>.No();
             _inputTcs = new TaskCompletionSource<GameAction>(); 
@@ -48,8 +46,8 @@ namespace Unity
         }
 
         // TODO: Дубляж кода
-        // TODO: в любом наборе фигур должен быть король
-        public bool KingCaptured() => _pieces.Any(piece => piece is King && piece.Captured);
+        // TODO: в любом наборе фигур должен быть король. В любом ли?
+        public bool KingCaptured() => _playerPieces.Any(piece => piece is King && piece.Captured);
 
         private void TapHandler(Coordinate tapCoordinate)
         {
