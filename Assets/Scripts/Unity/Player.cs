@@ -20,26 +20,31 @@ namespace Unity
         private Maybe<Piece> _selectedPiece = Maybe<Piece>.No();
         private List<Game.Pieces.Piece> _playerPieces; // TODO: наверное это Set? Возможно, вообще отдельный класс
         private List<Game.Pieces.Piece> _enemyPieces;
-        private bool _waitingForInput = false;
+        private bool WaitingForInput => !_inputTcs.Task?.IsCompleted ?? false;
 
-        public void Construct(List<Game.Pieces.Piece> playerPieces,
-            List<Game.Pieces.Piece> enemyPieces,
-            Game.Board boardModel,
+        public void Construct(
             Board board,
             InputService inputService,
             string name)
         {
-            _playerPieces = playerPieces;
-            _enemyPieces = enemyPieces;
             _board = board;
-            _boardModel = boardModel;
             Name = name;
             inputService.OnTap += TapHandler;
         }
 
+        public void JoinGame(
+            List<Game.Pieces.Piece> playerPieces,
+            List<Game.Pieces.Piece> enemyPieces,
+            Game.Board boardModel
+        )
+        {
+            _playerPieces = playerPieces;
+            _enemyPieces = enemyPieces;
+            _boardModel = boardModel;
+        }
+
         public Task<GameAction> GetInput()
         {
-            _waitingForInput = true;
             _selectedPiece = Maybe<Piece>.No();
             _inputTcs = new TaskCompletionSource<GameAction>(); 
             return _inputTcs.Task;
@@ -51,7 +56,7 @@ namespace Unity
 
         private void TapHandler(Coordinate tapCoordinate)
         {
-            if (_waitingForInput == false)
+            if (WaitingForInput == false)
                 return;
             
             if (_board.IsOnBoard(tapCoordinate) == false)
@@ -85,8 +90,6 @@ namespace Unity
             
             if(_selectedPiece.Value.PieceData.CanMoveTo(selectedTile))
             {
-                _waitingForInput = false;
-
                 GameAction move = pieceOnTile.Exists
                     ? new Capture(_selectedPiece.Value.PieceData, pieceOnTile.Value.PieceData)
                     : new Move(_selectedPiece.Value.PieceData, selectedTile);

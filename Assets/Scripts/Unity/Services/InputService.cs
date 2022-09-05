@@ -6,7 +6,8 @@ namespace Unity.Services
     public class InputService : MonoBehaviour
     {
         private Camera _camera;
-        
+        public event Action OnRestart;
+
         public event Action<Coordinate> OnTap;
 
         public void Construct(Camera camera)
@@ -18,6 +19,9 @@ namespace Unity.Services
         {
             if(Input.GetMouseButtonDown(0))
                 OnTap?.Invoke(Coordinate.FromScreen(Input.mousePosition, _camera));
+            
+            if(Input.GetKeyDown(KeyCode.R))
+                OnRestart?.Invoke();
         }
     }
 

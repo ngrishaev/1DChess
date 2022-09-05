@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common;
@@ -26,14 +25,51 @@ namespace Unity
         private Game.Board _boardModel;
         private Bounds _bounds;
         
-        public void Construct(Game.Board board, InputService inputService)
+        public void Construct(InputService inputService)
         {
-            _boardModel = board;
             _inputService = inputService;
-            
+        }
+        
+        public void SetBoard(Game.Board board)
+        {
+            ClearBoard();
+            _boardModel = board;
+
             CreateCells(_boardModel.Size);
             CreatePieces(board.Pieces);
         }
+
+        public Maybe<Piece> GetPiece(Coordinate tap)
+        {
+            if(IsOnBoard(tap) == false)
+                return Maybe<Piece>.No();
+
+            var tapTilePosition = WorldPosToCell(tap.World.x);
+            
+            if(IsAnyAt(tapTilePosition) == false)
+                return Maybe<Piece>.No();
+            
+            return Maybe<Piece>.Yes(_pieces.First( piece => piece.PieceData.Position.ValueEquals(tapTilePosition)));
+        }
+
+        public bool IsOnBoard(Coordinate coordinate) => _bounds.IsOverlapInZ(coordinate.World);
+
+        public int WorldPosToCell(float xPos) => Mathf.RoundToInt(0.5f * (_boardSizeInCells - 1) + xPos / _cellPrefab.Width);
+        
+        public void UpdateState()
+        {
+            foreach (var piece in _pieces)
+            {
+                if (piece.PieceData.Position.Exists)
+                    piece.PlaceAt(CellToWorldPos(piece.PieceData.Position.Value));
+                else
+                    piece.Capture();
+            }
+        }
+
+        private float CellToWorldPos(int cell) => _cellPrefab.Width * (0.5f + cell - (_boardSizeInCells / 2f));
+
+        private bool IsAnyAt(int position) => _pieces.Any(piece => piece.IsAt(position));
 
         private void HighlightMovesFor(Piece piece) => Highlight(_boardModel.GetAvailableMovesFor(piece.PieceData).ToList());
 
@@ -77,38 +113,16 @@ namespace Unity
 
             _bounds = new Bounds(transform.position, new Vector3(_boardSizeInCells * _cellPrefab.Width, _cellPrefab.Height, 0));
         }
-
-
-        public Maybe<Piece> GetPiece(Coordinate tap)
+        
+        private void ClearBoard()
         {
-            if(IsOnBoard(tap) == false)
-                return Maybe<Piece>.No();
-
-            var tapTilePosition = WorldPosToCell(tap.World.x);
+            foreach (var cell in _cells) 
+                Destroy(cell.gameObject);
+            _cells.Clear();
             
-            if(IsAnyAt(tapTilePosition) == false)
-                return Maybe<Piece>.No();
-            
-            return Maybe<Piece>.Yes(_pieces.First( piece => piece.PieceData.Position.ValueEquals(tapTilePosition)));
-        }
-
-        public bool IsOnBoard(Coordinate coordinate) => _bounds.IsOverlapInZ(coordinate.World);
-
-        public int WorldPosToCell(float xPos) => Mathf.RoundToInt(0.5f * (_boardSizeInCells - 1) + xPos / _cellPrefab.Width);
-
-        private float CellToWorldPos(int cell) => _cellPrefab.Width * (0.5f + cell - (_boardSizeInCells / 2f));
-
-        private bool IsAnyAt(int position) => _pieces.Any(piece => piece.IsAt(position));
-
-        public void UpdateState()
-        {
-            foreach (var piece in _pieces)
-            {
-                if (piece.PieceData.Position.Exists)
-                    piece.PlaceAt(CellToWorldPos(piece.PieceData.Position.Value));
-                else
-                    piece.Capture();
-            }
+            foreach (var piece in _pieces) 
+                Destroy(piece.gameObject);
+            _pieces.Clear();
         }
     }
 }

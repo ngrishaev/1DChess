@@ -10,14 +10,13 @@ public class Hud : MonoBehaviour
     
     private Game.Game _game;
 
-    public void Construct(Game.Game gameModel)
+    public void JoinGame(Game.Game gameModel)
     {
         _game = gameModel;
-        GameStart();
+        _endScreen.SetActive(false);
     }
 
     public void UpdateState() => _playerIndicator.text = "Current player: " + _game.CurrentPlayer.Name;
-    public void GameStart() => _endScreen.SetActive(false);
     public void GameEnd(IPlayer winner)
     {
         _endScreen.SetActive(true);

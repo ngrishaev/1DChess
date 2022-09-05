@@ -13,14 +13,14 @@ namespace Game
         private IPlayer _currentPlayer;
         private IPlayer _nextPlayer;
         private int _movesCount = 0;
-        public Board Board { get; }
+        private Board _board { get; }
         public IPlayer CurrentPlayer => _currentPlayer;
 
-        public Game(Board board, IPlayer p1, IPlayer p2)
+        public Game(Board board, IPlayer whitePlayer, IPlayer blackPlayer)
         {
-            Board = board;
-            _currentPlayer = p1;
-            _nextPlayer = p2;
+            _board = board;
+            _currentPlayer = whitePlayer;
+            _nextPlayer = blackPlayer;
         }
 
         public async void Run()
@@ -34,6 +34,7 @@ namespace Game
                 OnMoveFinished?.Invoke();
                 
                 SwitchPlayers();
+                _movesCount++;
             }
             OnGameFinished?.Invoke(_nextPlayer);
 
