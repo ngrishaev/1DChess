@@ -21,7 +21,7 @@ namespace Unity
 
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
         private Maybe<Piece> _selectedPiece = Maybe<Piece>.No();
-        private List<Game.Pieces.Piece> _playerPieces; // TODO: наверное это Set? Возможно, вообще отдельный класс
+        private List<Game.Pieces.Piece> _playerPieces;
         private bool WaitingForInput => !_inputTcs.Task?.IsCompleted ?? false;
 
         public void Construct(
@@ -49,9 +49,7 @@ namespace Unity
             _inputTcs = new TaskCompletionSource<GameAction>(); 
             return _inputTcs.Task;
         }
-
-        // TODO: Дубляж кода
-        // TODO: в любом наборе фигур должен быть король. В любом ли?
+        
         public bool KingCaptured() => _playerPieces.Any(piece => piece is King && piece.Captured);
 
         private void TapHandler(Coordinate tapCoordinate)

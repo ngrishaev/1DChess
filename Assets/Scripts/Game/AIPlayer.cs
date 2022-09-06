@@ -40,7 +40,6 @@ namespace Game
                 .Aggregate(new List<GameAction>(), (aggregate, position) =>
                     {
                         Maybe<Piece> pieceAtPosition = GetPieceAtPosition(position);
-                        // TODO: дубляж кода
                         GameAction move = pieceAtPosition.Exists
                             ? new Capture(piece, pieceAtPosition.Value)
                             : new Move(piece, position);

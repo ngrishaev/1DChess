@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Common;
 using Game.Pieces;
 
 namespace Game
@@ -32,8 +30,6 @@ namespace Game
             Pieces.AddRange(Whites);
             Pieces.AddRange(Blacks);
         }
-
-
 
         public IEnumerable<int> GetAvailableMovesFor(Piece piece)
         {
