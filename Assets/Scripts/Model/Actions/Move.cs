@@ -21,16 +21,4 @@ namespace Model.Actions
         protected override string StringRepresentation() => 
             $"{_piece.Color} colored ${_piece.GetType().Name} moves to {_position} position";
     }
-
-    public abstract class GameAction
-    {
-        public abstract void Do();
-
-        public sealed override string ToString()
-        {
-            return StringRepresentation();
-        }
-
-        protected abstract string StringRepresentation();
-    }
 }

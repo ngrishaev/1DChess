@@ -11,10 +11,11 @@ namespace Model.Pieces
             HaveAccessTo(newPosition) && 
             Pieces.All(piece => !(piece.Position.ValueEquals(newPosition) && piece.Color == Color)); 
         
+        
         private bool HaveAccessTo(int newPosition) =>
-            (newPosition == Position.Value + 2 ||
-             newPosition == Position.Value + 3 ||
-             newPosition == Position.Value - 2 ||
-             newPosition == Position.Value - 3);
+            Position.ValueEquals(newPosition - 2) ||
+            Position.ValueEquals(newPosition - 3) ||
+            Position.ValueEquals(newPosition + 3) ||
+            Position.ValueEquals(newPosition + 2);
     }
 }

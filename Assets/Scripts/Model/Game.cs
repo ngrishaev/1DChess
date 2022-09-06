@@ -1,14 +1,8 @@
-﻿using System.Threading.Tasks;
-using Model.Actions;
+﻿using Model.Actions;
 using UnityEngine;
 
 namespace Model
 {
-    public interface IGameObserver
-    {
-        public void OnMoveEnd();
-        public void OnGameFinished(IPlayer winner);
-    }
     public class Game
     {
         private readonly IGameObserver _gameObserver;
@@ -47,12 +41,5 @@ namespace Model
 
         private void SwitchPlayers() => 
             (_currentPlayer, _nextPlayer) = (_nextPlayer, _currentPlayer);
-    }
-
-    public interface IPlayer
-    {
-        string Name { get; }
-        Task<GameAction> GetInput();
-        bool KingCaptured();
     }
 }

@@ -13,9 +13,11 @@ namespace Unity
 
         [Header("Resources")]
         [SerializeField] private Sprite _king;
-
         [SerializeField] private Sprite _knight;
         [SerializeField] private Sprite _rook;
+        [SerializeField] private Sprite _bishop;
+        [SerializeField] private Sprite _pawn;
+        [SerializeField] private Sprite _queen;
 
         public Model.Pieces.Piece PieceData { get; private set; }
 
@@ -26,7 +28,10 @@ namespace Unity
             PieceData = piece;
             _spriteRenderer.sprite = piece switch
             {
+                Bishop => _bishop,
                 Knight => _knight,
+                Pawn => _pawn,
+                Queen => _queen,
                 King => _king,
                 Rook => _rook,
                 _ => throw new ArgumentOutOfRangeException($"Cant find sprite for {piece.GetType()} piece")

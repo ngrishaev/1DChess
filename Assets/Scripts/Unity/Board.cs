@@ -8,7 +8,6 @@ namespace Unity
 {
     public class Board : MonoBehaviour
     {
-
         [SerializeField] private Transform _cellsRoot;
         [SerializeField] private Transform _piecesRoot;
         

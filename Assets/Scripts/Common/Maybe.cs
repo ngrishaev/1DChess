@@ -24,8 +24,6 @@ namespace Common
         public bool ValueEquals(Maybe<T> other) => Exists && other.Exists && other.Value.Equals(Value);
         public bool ValueEquals(T value) => Exists && value.Equals(Value);
         
-        
-
         public override string ToString()
         {
             if (Exists)

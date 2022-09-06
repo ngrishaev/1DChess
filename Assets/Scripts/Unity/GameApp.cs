@@ -5,7 +5,7 @@ namespace Unity
 {
     public class GameApp : IGameObserver
     {
-        private const int BoardSize = 11;
+        private const int BoardSize = 16;
         
         private readonly InputService _inputService;
         private readonly Board _board;
