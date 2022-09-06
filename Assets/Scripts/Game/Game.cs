@@ -5,22 +5,27 @@ using UnityEngine;
 
 namespace Game
 {
+    public interface IGameObserver
+    {
+        public void OnMoveEnd();
+        public void OnGameFinished(IPlayer winner);
+    }
     public class Game
     {
-        public event Action OnMoveFinished;
-        public event Action<IPlayer> OnGameFinished;
-        
+        private readonly IGameObserver _gameObserver;
         private IPlayer _currentPlayer;
         private IPlayer _nextPlayer;
-        private int _movesCount = 0;
-        private Board _board { get; }
+        private Board _board;
         public IPlayer CurrentPlayer => _currentPlayer;
 
-        public Game(Board board, IPlayer whitePlayer, IPlayer blackPlayer)
+        private int _movesCount = 0;
+
+        public Game(Board board, IPlayer whitePlayer, IPlayer blackPlayer, IGameObserver gameObserver)
         {
             _board = board;
             _currentPlayer = whitePlayer;
             _nextPlayer = blackPlayer;
+            _gameObserver = gameObserver;
         }
 
         public async void Run()
@@ -31,12 +36,12 @@ namespace Game
                 playerAction.Do();
                 Debug.Log(playerAction.ToString());
                 
-                OnMoveFinished?.Invoke();
+                _gameObserver.OnMoveEnd();
                 
                 SwitchPlayers();
                 _movesCount++;
             }
-            OnGameFinished?.Invoke(_nextPlayer);
+            _gameObserver.OnGameFinished(_nextPlayer);
 
             Debug.Log("Moves count > 100");
         }

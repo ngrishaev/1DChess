@@ -3,7 +3,7 @@ using Unity.Services;
 
 namespace Unity
 {
-    public class GameApp
+    public class GameApp : IGameObserver
     {
         private const int BoardSize = 11;
         
@@ -29,7 +29,20 @@ namespace Unity
 
         public void Boot() => StartGame();
 
-        public void StartGame()
+        public void OnMoveEnd()
+        {
+            _board.UpdateState();
+            _hud.UpdateState();
+        }
+
+        public void OnGameFinished(IPlayer winner)
+        {
+            _hud.GameEnd(winner);
+            
+            _gameInProcess = false;
+        }
+
+        private void StartGame()
         {
             _gameInProcess = true;
             
@@ -38,30 +51,12 @@ namespace Unity
 
             _humanPlayer.JoinGame(boardModel.Whites, boardModel);
 
-            _gameModel = new Game.Game(boardModel, _humanPlayer, new AIPlayer(boardModel, boardModel.Blacks, "Black"));
-
-            _gameModel.OnMoveFinished += UpdateHandler;
-            _gameModel.OnGameFinished += FinishHandler;
+            _gameModel =
+                new Game.Game(boardModel, _humanPlayer, new AIPlayer(boardModel, boardModel.Blacks, "Black"), this);
             
             _hud.JoinGame(_gameModel);
             
             _gameModel.Run();
-        }
-
-        private void FinishHandler(IPlayer winner)
-        {
-            _gameModel.OnMoveFinished -= UpdateHandler;
-            _gameModel.OnGameFinished -= FinishHandler;
-            
-            _hud.GameEnd(winner);
-            
-            _gameInProcess = false;
-        }
-
-        private void UpdateHandler()
-        {
-            _board.UpdateState();
-            _hud.UpdateState();
         }
 
         private void RestartHandler()
