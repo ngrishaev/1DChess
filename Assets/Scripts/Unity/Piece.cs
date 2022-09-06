@@ -1,7 +1,7 @@
 using System;
-using Game.Pieces;
+using Model.Pieces;
 using UnityEngine;
-using Color = Game.Pieces.Color;
+using Color = Model.Pieces.Color;
 
 namespace Unity
 {
@@ -17,11 +17,11 @@ namespace Unity
         [SerializeField] private Sprite _knight;
         [SerializeField] private Sprite _rook;
 
-        public Game.Pieces.Piece PieceData { get; private set; }
+        public Model.Pieces.Piece PieceData { get; private set; }
 
         private readonly Vector3 _capturedPosition = Vector3.one * 1000f;
 
-        public void Construct(Game.Pieces.Piece piece)
+        public void Construct(Model.Pieces.Piece piece)
         {
             PieceData = piece;
             _spriteRenderer.sprite = piece switch

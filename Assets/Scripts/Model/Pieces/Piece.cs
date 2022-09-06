@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Common;
 
-namespace Game.Pieces
+namespace Model.Pieces
 {
     public abstract class Piece
     {

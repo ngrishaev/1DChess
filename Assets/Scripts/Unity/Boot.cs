@@ -1,6 +1,6 @@
 using Unity.Services;
 using UnityEngine;
-using GameModel = Game.Game;
+using GameModel = Model.Game;
 
 namespace Unity
 {
@@ -24,11 +24,10 @@ namespace Unity
 
         private GameApp ComposeApp()
         {
+            var board = Instantiate(_board, Vector3.zero, Quaternion.identity);
+            
             var inputService = Instantiate(_inputService);
             inputService.Construct(_mainCamera);
-
-            var board = Instantiate(_board, Vector3.zero, Quaternion.identity);
-            board.Construct(_inputService);
 
             var humanPlayer = Instantiate(_player);
             humanPlayer.Construct(board, inputService, "White");

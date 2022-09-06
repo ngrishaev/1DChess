@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common;
-using Game;
-using Game.Actions;
-using Game.Pieces;
+using Model;
+using Model.Actions;
+using Model.Pieces;
 using Unity.Services;
 using UnityEngine;
 
@@ -17,11 +17,10 @@ namespace Unity
         public event Action<Unity.Piece> OnPieceSelect; 
         public event Action<Unity.Piece> OnPieceDeselect; 
         private Board _board;
-        private Game.Board _boardModel;
 
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
         private Maybe<Piece> _selectedPiece = Maybe<Piece>.No();
-        private List<Game.Pieces.Piece> _playerPieces;
+        private List<Model.Pieces.Piece> _playerPieces;
         private bool WaitingForInput => !_inputTcs.Task?.IsCompleted ?? false;
 
         public void Construct(
@@ -35,12 +34,10 @@ namespace Unity
         }
 
         public void JoinGame(
-            List<Game.Pieces.Piece> playerPieces,
-            Game.Board boardModel
+            List<Model.Pieces.Piece> playerPieces
         )
         {
             _playerPieces = playerPieces;
-            _boardModel = boardModel;
         }
 
         public Task<GameAction> GetInput()

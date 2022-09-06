@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Game.Pieces;
+using Model.Pieces;
 
-namespace Game
+namespace Model
 {
     public class Board
     {

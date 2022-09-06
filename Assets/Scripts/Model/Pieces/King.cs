@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.Pieces
+namespace Model.Pieces
 {
     public class King : Piece
     {

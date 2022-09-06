@@ -1,6 +1,6 @@
-﻿using Game.Pieces;
+﻿using Model.Pieces;
 
-namespace Game.Actions
+namespace Model.Actions
 {
     public class Move : GameAction
     {

@@ -1,4 +1,4 @@
-﻿using Game;
+﻿using Model;
 using Unity.Services;
 
 namespace Unity
@@ -11,7 +11,7 @@ namespace Unity
         private readonly Board _board;
         private readonly Player _humanPlayer;
         private readonly Hud _hud;
-        private Game.Game _gameModel;
+        private Game _gameModel;
         private bool _gameInProcess;
 
         public GameApp(InputService inputService, Board board, Player humanPlayer, Hud hud)
@@ -46,13 +46,13 @@ namespace Unity
         {
             _gameInProcess = true;
             
-            var boardModel = new Game.Board(BoardSize);
+            var boardModel = new Model.Board(BoardSize);
             _board.SetBoard(boardModel);
 
-            _humanPlayer.JoinGame(boardModel.Whites, boardModel);
+            _humanPlayer.JoinGame(boardModel.Whites);
 
             _gameModel =
-                new Game.Game(boardModel, _humanPlayer, new AIPlayer(boardModel, boardModel.Blacks, "Black"), this);
+                new Game(boardModel, _humanPlayer, new AIPlayer(boardModel, boardModel.Blacks, "Black"), this);
             
             _hud.JoinGame(_gameModel);
             

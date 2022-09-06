@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Game.Actions;
+﻿using System.Threading.Tasks;
+using Model.Actions;
 using UnityEngine;
 
-namespace Game
+namespace Model
 {
     public interface IGameObserver
     {

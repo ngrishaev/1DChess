@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Common;
-using Game.Actions;
-using Game.Pieces;
+using Model.Actions;
+using Model.Pieces;
 using UnityEngine;
 
-namespace Game
+namespace Model
 {
     public class AIPlayer : IPlayer
     {

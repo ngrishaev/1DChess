@@ -1,5 +1,4 @@
 using Common;
-using Unity.Services;
 using UnityEngine;
 
 namespace Unity
@@ -14,22 +13,15 @@ namespace Unity
         [SerializeField] private Sprite _evenBackground;
         [SerializeField] private Sprite _oddBackground;
         [SerializeField] private Sprite _moveHighlight;
-        [SerializeField] private Sprite _captureHighlight;
 
         public int Position { get; private set; }
         public float Width => _cellRenderer.bounds.size.x;
         public float Height => _cellRenderer.bounds.size.y;
-
-
+        
         public void Construct(int position)
         {
             Position = position;
             SetBackground(position);
-        }
-
-        public bool IsContains(Coordinate pos)
-        {
-            return _cellRenderer.bounds.IsOverlapInZ(pos.World);
         }
 
         private void SetBackground(int position)

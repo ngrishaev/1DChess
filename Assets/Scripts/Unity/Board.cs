@@ -18,19 +18,13 @@ namespace Unity
 
         private List<Cell> _cells = new List<Cell>();
         private List<Piece> _pieces = new List<Piece>();
-
-        private InputService _inputService;
+        
         private int _boardSizeInCells;
 
-        private Game.Board _boardModel;
+        private Model.Board _boardModel;
         private Bounds _bounds;
-        
-        public void Construct(InputService inputService)
-        {
-            _inputService = inputService;
-        }
-        
-        public void SetBoard(Game.Board board)
+
+        public void SetBoard(Model.Board board)
         {
             ClearBoard();
             _boardModel = board;
@@ -82,7 +76,7 @@ namespace Unity
                 cell.Highlight(positions.Contains(cell.Position));
         }
 
-        private void CreatePieces(List<Game.Pieces.Piece> boardPieces)
+        private void CreatePieces(List<Model.Pieces.Piece> boardPieces)
         {
             foreach (var pieceData in boardPieces)
             {
