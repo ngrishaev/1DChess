@@ -73,6 +73,11 @@ namespace Unity
             if(_playerPieces.Any(piece => piece == selectedPiece.Value.PieceData) == false)
                 return;
             
+            SelectPiece(selectedPiece);
+        }
+
+        private void SelectPiece(Maybe<Piece> selectedPiece)
+        {
             _selectedPiece = selectedPiece;
             OnPieceSelect?.Invoke(_selectedPiece.Value);
             Debug.Log($"Selected piece for {Name}");
@@ -87,6 +92,12 @@ namespace Unity
             {
                 OnPieceDeselect?.Invoke(_selectedPiece.Value);
                 _selectedPiece = Maybe<Piece>.No();
+                return;
+            }
+            
+            if(pieceOnTile.Exists && pieceOnTile.Value.PieceData.Color == _selectedPiece.Value.Color)
+            {
+                SelectPiece(pieceOnTile);
                 return;
             }
             

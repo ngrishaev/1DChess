@@ -20,6 +20,7 @@ namespace Unity
         [SerializeField] private Sprite _queen;
 
         public Model.Pieces.Piece PieceData { get; private set; }
+        public Color Color => PieceData.Color;
 
         private readonly Vector3 _capturedPosition = Vector3.one * 1000f;
 
