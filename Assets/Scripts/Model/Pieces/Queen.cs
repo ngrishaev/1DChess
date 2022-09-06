@@ -32,7 +32,7 @@ namespace Model.Pieces
             if (piece.Captured)
                 return false;
             
-            if (piece.Position.Value % 2 == firstPosition % 2)
+            if (piece.Position.Value % 2 != firstPosition % 2)
                 return false;
             
             var (min, max) = firstPosition < secondPosition
