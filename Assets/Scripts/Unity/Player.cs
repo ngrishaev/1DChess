@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common;
@@ -13,6 +14,8 @@ namespace Unity
     public class Player : MonoBehaviour, IPlayer
     {
         public string Name { get; private set; }
+        public event Action<Unity.Piece> OnPieceSelect; 
+        public event Action<Unity.Piece> OnPieceDeselect; 
         private Board _board;
         private Game.Board _boardModel;
 
@@ -79,7 +82,7 @@ namespace Unity
                 return;
             
             _selectedPiece = selectedPiece;
-            _selectedPiece.Value.Select();
+            OnPieceSelect?.Invoke(_selectedPiece.Value);
             Debug.Log($"Selected piece for {Name}");
         }
 
@@ -87,6 +90,13 @@ namespace Unity
         {
             var selectedTile = _board.WorldPosToCell(tapCoordinate.World.x);
             var pieceOnTile = _board.GetPiece(tapCoordinate);
+
+            if (pieceOnTile.ValueEquals(_selectedPiece))
+            {
+                OnPieceDeselect?.Invoke(_selectedPiece.Value);
+                _selectedPiece = Maybe<Piece>.No();
+                return;
+            }
             
             if(_selectedPiece.Value.PieceData.CanMoveTo(selectedTile))
             {

@@ -58,6 +58,9 @@ namespace Unity
         
         public void UpdateState()
         {
+            foreach (var cell in _cells) 
+                cell.Highlight(false);
+
             foreach (var piece in _pieces)
             {
                 if (piece.PieceData.Position.Exists)
@@ -67,11 +70,11 @@ namespace Unity
             }
         }
 
+        public void HighlightMovesFor(Piece piece) => Highlight(_boardModel.GetAvailableMovesFor(piece.PieceData).ToList());
+        
         private float CellToWorldPos(int cell) => _cellPrefab.Width * (0.5f + cell - (_boardSizeInCells / 2f));
 
         private bool IsAnyAt(int position) => _pieces.Any(piece => piece.IsAt(position));
-
-        private void HighlightMovesFor(Piece piece) => Highlight(_boardModel.GetAvailableMovesFor(piece.PieceData).ToList());
 
         private void Highlight(List<int> positions)
         {
@@ -87,16 +90,9 @@ namespace Unity
                 piece.Construct(pieceData);
                 
                 piece.PlaceAt(CellToWorldPos(pieceData.Position.Value));
-
-                piece.OnSelect += PieceSelectionHandler;
                 
                 _pieces.Add(piece);
             }
-        }
-
-        private void PieceSelectionHandler(Piece selectedPiece)
-        {
-            HighlightMovesFor(selectedPiece);
         }
 
         private void CreateCells(int size)
@@ -123,6 +119,12 @@ namespace Unity
             foreach (var piece in _pieces) 
                 Destroy(piece.gameObject);
             _pieces.Clear();
+        }
+
+        public void ResetHighlight()
+        {
+            foreach (var cell in _cells) 
+                cell.Highlight(false);
         }
     }
 }

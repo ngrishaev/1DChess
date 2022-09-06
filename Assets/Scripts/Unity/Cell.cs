@@ -6,7 +6,6 @@ namespace Unity
 {
     public class Cell : MonoBehaviour
     {
-        
         [SerializeField] private SpriteRenderer _cellRenderer;
         [SerializeField] private SpriteRenderer _higlightRenderer;
         [SerializeField] private float SelectionHeight = 0.1f;

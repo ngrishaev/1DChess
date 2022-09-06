@@ -21,13 +21,13 @@ namespace Unity
             _humanPlayer = humanPlayer;
             _hud = hud;
             _gameInProcess = false;
-        }
 
-        public void Boot()
-        {
-            StartGame();
+            _humanPlayer.OnPieceSelect += _board.HighlightMovesFor;
+            _humanPlayer.OnPieceDeselect += _ => _board.ResetHighlight();
             _inputService.OnRestart += RestartHandler;
         }
+
+        public void Boot() => StartGame();
 
         public void StartGame()
         {

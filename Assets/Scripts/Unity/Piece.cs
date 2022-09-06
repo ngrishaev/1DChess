@@ -16,7 +16,6 @@ namespace Unity
 
         [SerializeField] private Sprite _knight;
         [SerializeField] private Sprite _rook;
-        public event Action<Piece> OnSelect;
 
         public Game.Pieces.Piece PieceData { get; private set; }
 
@@ -43,6 +42,5 @@ namespace Unity
 
         public void PlaceAt(float xPos) => transform.localPosition = new Vector3(xPos, 0, 0);
         public bool IsAt(int position) => PieceData.Position.ValueEquals(position);
-        public void Select() => OnSelect?.Invoke(this);
     }
 }
