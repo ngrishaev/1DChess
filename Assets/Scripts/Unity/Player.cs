@@ -22,7 +22,6 @@ namespace Unity
         private TaskCompletionSource<GameAction> _inputTcs = new TaskCompletionSource<GameAction>();
         private Maybe<Piece> _selectedPiece = Maybe<Piece>.No();
         private List<Game.Pieces.Piece> _playerPieces; // TODO: наверное это Set? Возможно, вообще отдельный класс
-        private List<Game.Pieces.Piece> _enemyPieces;
         private bool WaitingForInput => !_inputTcs.Task?.IsCompleted ?? false;
 
         public void Construct(
@@ -37,12 +36,10 @@ namespace Unity
 
         public void JoinGame(
             List<Game.Pieces.Piece> playerPieces,
-            List<Game.Pieces.Piece> enemyPieces,
             Game.Board boardModel
         )
         {
             _playerPieces = playerPieces;
-            _enemyPieces = enemyPieces;
             _boardModel = boardModel;
         }
 

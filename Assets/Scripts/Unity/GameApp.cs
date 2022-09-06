@@ -36,7 +36,7 @@ namespace Unity
             var boardModel = new Game.Board(BoardSize);
             _board.SetBoard(boardModel);
 
-            _humanPlayer.JoinGame(boardModel.Whites, boardModel.Blacks, boardModel);
+            _humanPlayer.JoinGame(boardModel.Whites, boardModel);
 
             _gameModel = new Game.Game(boardModel, _humanPlayer, new AIPlayer(boardModel, boardModel.Blacks, "Black"));
 
