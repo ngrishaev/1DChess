@@ -25,7 +25,7 @@ namespace Model.Pieces
 
         public abstract bool CanMoveTo(int newPosition);
 
-        public void MoveTo(int position) => Position = Maybe<int>.Yes(position);
+        public virtual void MoveTo(int position) => Position = Maybe<int>.Yes(position);
 
         public void Capture() => Position = Maybe<int>.No();
     }
