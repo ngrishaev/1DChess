@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Model.Services;
 
 namespace Model.Pieces
 {
@@ -11,7 +12,7 @@ namespace Model.Pieces
 
         public override bool CanMoveTo(int newPosition)
         {
-            return PathAvailabilityServiceStatic.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces) &&
+            return PathService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces) &&
                    OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
         }
     }

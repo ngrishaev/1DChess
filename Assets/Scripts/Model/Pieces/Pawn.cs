@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Model.Services;
 
 namespace Model.Pieces
 {
     public class Pawn : Piece
     {
-        private readonly bool _forwardIsRight;
-        private bool _haveMoved;
+        public readonly bool ForwardIsRight;
+        public bool WasMoved { get; private set; }
 
         public Pawn(
             int position,
@@ -15,19 +16,19 @@ namespace Model.Pieces
         )
             : base(position, color, pieces, pathService)
         {
-            _forwardIsRight = color == Color.White;
+            ForwardIsRight = color == Color.White;
         }
 
         public override bool CanMoveTo(int newPosition)
         {
-            return PathAvailabilityServiceStatic.PawnPath(Position.Value, newPosition, _haveMoved, _forwardIsRight, Pieces) &&
-                   OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
+            return PathService.IsPawnPathAvailable(Position.Value, newPosition, WasMoved, ForwardIsRight, Pieces) &&
+                   OccupiedPositionStrategy.PawnOccupyTarget(this, newPosition, Pieces);
         }
 
         public override void MoveTo(int position)
         {
             base.MoveTo(position);
-            _haveMoved = true;
+            WasMoved = true;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Pieces;
+using Model.Services;
 
 namespace Model
 {
@@ -12,25 +13,28 @@ namespace Model
         public Board(int size)
         {
             Size = size;
+
+            var pathService = new PathAvailabilityService();
             
+            //TODO: factory?
             Whites = new()
             {
-                new King(0, Color.White, Pieces, TODO),
-                new Queen(1, Color.White, Pieces, TODO),
-                new Rook(2, Color.White, Pieces, TODO),
-                new Bishop(3, Color.White, Pieces, TODO),
-                new Knight(4, Color.White, Pieces, TODO),
-                new Pawn(5, Color.White, Pieces, TODO),
+                new King(0, Color.White, Pieces, pathService),
+                new Queen(1, Color.White, Pieces, pathService),
+                new Rook(2, Color.White, Pieces, pathService),
+                new Bishop(3, Color.White, Pieces, pathService),
+                new Knight(4, Color.White, Pieces, pathService),
+                new Pawn(5, Color.White, Pieces, pathService),
             };
             
             Blacks = new()
             {
-                new King(Size - 1, Color.Black, Pieces, TODO),
-                new Queen(Size - 2, Color.Black, Pieces, TODO),
-                new Rook(Size - 3, Color.Black, Pieces, TODO),
-                new Bishop(Size - 4, Color.Black, Pieces, TODO),
-                new Knight(Size - 5, Color.Black, Pieces, TODO),
-                new Pawn(Size - 6, Color.Black, Pieces, TODO),
+                new King(Size - 1, Color.Black, Pieces, pathService),
+                new Queen(Size - 2, Color.Black, Pieces, pathService),
+                new Rook(Size - 3, Color.Black, Pieces, pathService),
+                new Bishop(Size - 4, Color.Black, Pieces, pathService),
+                new Knight(Size - 5, Color.Black, Pieces, pathService),
+                new Pawn(Size - 6, Color.Black, Pieces, pathService),
             };
             
             Pieces.AddRange(Whites);

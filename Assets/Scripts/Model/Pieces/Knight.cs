@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Model.Services;
 
 namespace Model.Pieces
 {
@@ -11,7 +12,7 @@ namespace Model.Pieces
 
         public override bool CanMoveTo(int newPosition)
         {
-            return PathAvailabilityServiceStatic.IsKnightPathAvailable(Position.Value, newPosition)
+            return PathService.IsKnightPathAvailable(Position.Value, newPosition)
                    && OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
         }
     }
