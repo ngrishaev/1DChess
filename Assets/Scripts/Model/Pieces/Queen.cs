@@ -11,7 +11,7 @@ namespace Model.Pieces
         }
 
         public override bool CanMoveTo(int newPosition) =>
-            PathAvailabilityService.IsStraightPathAvailable(this, newPosition, Pieces) ||
-            PathAvailabilityService.IsDiagonalPathAvailable(this, newPosition, Pieces);
+            PathAvailabilityService.IsStraightPathAvailable(Position.Value, newPosition, Pieces) ||
+            PathAvailabilityService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces);
     }
 }

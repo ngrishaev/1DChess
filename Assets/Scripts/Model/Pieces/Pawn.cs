@@ -12,22 +12,12 @@ namespace Model.Pieces
             => _forwardIsRight = forwardIsRight;
 
         public override bool CanMoveTo(int newPosition) =>
-            HaveAccessTo(newPosition) && 
-            Pieces.All(piece => !(piece.Position.ValueEquals(newPosition) && piece.Color == Color));
-
+            PathAvailabilityService.PawnPath(Position.Value, newPosition, _haveMoved, _forwardIsRight,  Pieces);
+        
         public override void MoveTo(int position)
         {
             base.MoveTo(position);
             _haveMoved = true;
         }
-
-        private bool HaveAccessTo(int newPosition) =>
-            HaveAccessTo(newPosition, _forwardIsRight? 1 : -1);
-
-        private bool HaveAccessTo(int newPosition, int direction) =>
-            Position.ValueEquals(newPosition - direction * 1) ||
-            (!_haveMoved && Position.ValueEquals(newPosition - direction * 2));
-
-
     }
 }

@@ -8,16 +8,40 @@ namespace Model
     // TODO: Refactor static
     public static class PathAvailabilityService
     {
-        public static bool IsStraightPathAvailable(Piece piece, int targetPosition, List<Piece> pieces) =>
-            !pieces.Any(otherPiece => InBetween(otherPiece, piece.Position.Value, targetPosition));
-        public static bool IsDiagonalPathAvailable(Piece piece, int targetPosition, List<Piece> pieces)
+        public static bool IsStraightPathAvailable(int from, int to, List<Piece> pieces) =>
+            !pieces.Any(otherPiece => InBetweenStraight(otherPiece, from, to));
+
+        public static bool IsDiagonalPathAvailable(int from, int to, List<Piece> pieces)
         {
-            if (piece.Position.Value % 2 != targetPosition % 2)
+            if (from % 2 != to % 2)
                 return false;
-            return !pieces.Any(otherPiece => InBetweenDiagonal(otherPiece, piece.Position.Value, targetPosition));
+            
+            return !pieces.Any(otherPiece => InBetweenDiagonal(otherPiece, from, to));
         }
 
-        private static bool InBetween(Piece piece, int firstPosition, int secondPosition)
+        public static bool IsKingPathAvailable(int from, int to) =>
+            to == from + 1 || to == from - 1;
+
+        public static bool IsKnightPathAvailable(int positionValue, int newPosition) =>
+            positionValue == newPosition - 2 ||
+            positionValue == newPosition - 3 ||
+            positionValue == newPosition + 3 ||
+            positionValue == newPosition + 2;
+
+        public static bool PawnPath(int from, int to, bool pawnAlreadyMoved, bool rightIsForward, List<Piece> pieces)
+        {
+            var firstPosition = rightIsForward ? from + 1 : from -1; 
+            if (to == firstPosition)
+                return true;
+            
+            var secondPosition = rightIsForward ? from + 2 : from -2;
+            if (to != secondPosition || pawnAlreadyMoved)
+                return false;
+            return PawnPath(from, to, true, rightIsForward, pieces) ||
+                   IsStraightPathAvailable(from, to, pieces);
+        }
+
+        private static bool InBetweenStraight(Piece piece, int firstPosition, int secondPosition)
         {
             if (piece.Captured)
                 return false;
