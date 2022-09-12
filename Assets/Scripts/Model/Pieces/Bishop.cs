@@ -6,10 +6,12 @@ namespace Model.Pieces
     {
         public Bishop(int position, Color color, List<Piece> pieces) : base(position, color, pieces)
         {
-            
         }
 
-        public override bool CanMoveTo(int newPosition) =>
-         PathAvailabilityService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces);
+        public override bool CanMoveTo(int newPosition)
+        {
+            return PathAvailabilityService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces) &&
+                   OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
+        }
     }
 }

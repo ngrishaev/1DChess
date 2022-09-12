@@ -6,7 +6,7 @@ using Model.Actions;
 using Model.Pieces;
 using UnityEngine;
 
-namespace Model
+namespace Model.Players
 {
     public class AIPlayer : IPlayer
     {

@@ -72,4 +72,12 @@ namespace Model
             return piece.Position.Value > min && piece.Position.Value < max;
         }
     }
+
+    public static class OccupiedPositionStrategy
+    {
+        public static bool DefaultStrategy(Piece actor, int target, List<Piece> pieces) =>
+            !pieces
+                .Where(piece => !piece.Captured)
+                .Any(piece => piece.Position.Value == target && piece.Color == actor.Color);
+    }
 }

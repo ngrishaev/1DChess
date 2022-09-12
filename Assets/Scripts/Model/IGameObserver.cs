@@ -1,4 +1,6 @@
-﻿namespace Model
+﻿using Model.Players;
+
+namespace Model
 {
     public interface IGameObserver
     {

@@ -8,7 +8,10 @@ namespace Model.Pieces
         {
         }
 
-        public override bool CanMoveTo(int newPosition) => 
-            PathAvailabilityService.IsStraightPathAvailable(Position.Value, newPosition, Pieces);
+        public override bool CanMoveTo(int newPosition)
+        {
+            return PathAvailabilityService.IsStraightPathAvailable(Position.Value, newPosition, Pieces) &&
+                   OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
+        }
     }
 }

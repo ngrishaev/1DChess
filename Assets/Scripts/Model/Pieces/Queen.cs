@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Model.Pieces
 {
@@ -10,8 +8,11 @@ namespace Model.Pieces
         {
         }
 
-        public override bool CanMoveTo(int newPosition) =>
-            PathAvailabilityService.IsStraightPathAvailable(Position.Value, newPosition, Pieces) ||
-            PathAvailabilityService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces);
+        public override bool CanMoveTo(int newPosition)
+        {
+            return (PathAvailabilityService.IsStraightPathAvailable(Position.Value, newPosition, Pieces) ||
+                    PathAvailabilityService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces)) &&
+                   OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
+        }
     }
 }

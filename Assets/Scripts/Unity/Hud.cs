@@ -1,4 +1,5 @@
 using Model;
+using Model.Players;
 using TMPro;
 using UnityEngine;
 

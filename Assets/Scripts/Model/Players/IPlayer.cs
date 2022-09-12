@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Model.Actions;
 
-namespace Model
+namespace Model.Players
 {
     public interface IPlayer
     {

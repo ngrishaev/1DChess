@@ -6,10 +6,6 @@ namespace Model.Pieces
 {
     public abstract class Piece
     {
-        public Maybe<int> Position { get; private set; }
-        public Color Color { get; }
-        public bool Captured => Position.Exists == false;
-        
         protected readonly List<Piece> Pieces;
 
         protected Piece(int position, Color color, List<Piece> pieces)
@@ -23,13 +19,23 @@ namespace Model.Pieces
             Color = color;
         }
 
+        public Maybe<int> Position { get; private set; }
+        public Color Color { get; }
+        public bool Captured => Position.Exists == false;
+
         public abstract bool CanMoveTo(int newPosition);
 
-        public virtual void MoveTo(int position) => Position = Maybe<int>.Yes(position);
+        public virtual void MoveTo(int position)
+        {
+            Position = Maybe<int>.Yes(position);
+        }
 
-        public void Capture() => Position = Maybe<int>.No();
+        public void Capture()
+        {
+            Position = Maybe<int>.No();
+        }
     }
-    
+
     public enum Color
     {
         Black,
