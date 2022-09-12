@@ -7,8 +7,9 @@ namespace Model.Pieces
     public abstract class Piece
     {
         protected readonly List<Piece> Pieces;
+        protected PathAvailabilityService PathAvailabilityService;
 
-        protected Piece(int position, Color color, List<Piece> pieces)
+        protected Piece(int position, Color color, List<Piece> pieces, PathAvailabilityService pathAvailabilityService)
         {
             if (position < 0)
                 throw new ArgumentOutOfRangeException(
@@ -17,6 +18,7 @@ namespace Model.Pieces
 
             Position = Maybe<int>.Yes(position);
             Color = color;
+            PathAvailabilityService = pathAvailabilityService;
         }
 
         public Maybe<int> Position { get; private set; }

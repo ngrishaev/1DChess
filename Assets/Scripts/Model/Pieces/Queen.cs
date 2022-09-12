@@ -4,14 +4,15 @@ namespace Model.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(int position, Color color, List<Piece> pieces) : base(position, color, pieces)
+        public Queen(int position, Color color, List<Piece> pieces, PathAvailabilityService pathService)
+            : base(position, color, pieces, pathService)
         {
         }
 
         public override bool CanMoveTo(int newPosition)
         {
-            return (PathAvailabilityService.IsStraightPathAvailable(Position.Value, newPosition, Pieces) ||
-                    PathAvailabilityService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces)) &&
+            return (PathAvailabilityServiceStatic.IsStraightPathAvailable(Position.Value, newPosition, Pieces) ||
+                    PathAvailabilityServiceStatic.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces)) &&
                    OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
         }
     }
