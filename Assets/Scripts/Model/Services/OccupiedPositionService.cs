@@ -7,14 +7,14 @@ using Model.Pieces;
 namespace Model.Services
 {
     // TODO: Refactor static
-    public static class OccupiedPositionStrategy
+    public class OccupiedPositionService
     {
-        public static bool DefaultStrategy(Piece actor, int target, List<Piece> pieces) =>
+        public bool DefaultStrategy(Piece actor, int target, List<Piece> pieces) =>
             !pieces
                 .Where(piece => !piece.Captured)
                 .Any(piece => piece.Position.Value == target && piece.Color == actor.Color);
         
-        public static bool PawnOccupyTarget(Pawn pawn, int target, List<Piece> pieces) =>
+        public bool PawnOccupyTarget(Pawn pawn, int target, List<Piece> pieces) =>
             // TODO: Asserts?
             Math.Abs(pawn.Position.Value - target) == 1
                 ? PawnOccupyClosest(pawn, pieces)
@@ -23,12 +23,8 @@ namespace Model.Services
         private static bool PawnOccupyClosest(Pawn pawn, List<Piece> pieces)
         {
             var target = pawn.ForwardIsRight ? pawn.Position.Value + 1 : pawn.Position.Value - 1;
-            
-            var nextPiece = pieces.FindFirstOrDefault(
-                piece => !piece.Captured && piece.Position.Value == target,
-                Maybe<Piece>.Yes,
-                Maybe<Piece>.No()
-            );
+
+            var nextPiece = pieces.MaybeFind(piece => !piece.Captured && piece.Position.Value == target);
             
             return !(nextPiece.Exists && nextPiece.Value.Color == pawn.Color);
         }
@@ -38,14 +34,9 @@ namespace Model.Services
         {
             var target = pawn.ForwardIsRight ? pawn.Position.Value + 2 : pawn.Position.Value - 2;
             
-            var nextPiece = pieces.FindFirstOrDefault(
-                piece => !piece.Captured && piece.Position.Value == target,
-                Maybe<Piece>.Yes,
-                Maybe<Piece>.No()
-            );
+            var nextPiece = pieces.MaybeFind(piece => !piece.Captured && piece.Position.Value == target);
             
             return !nextPiece.Exists;
         }
-        
     }
 }

@@ -5,15 +5,21 @@ namespace Model.Pieces
 {
     public class Knight : Piece
     {
-        public Knight(int position, Color color, List<Piece> pieces, PathAvailabilityService pathService) 
-            : base(position, color, pieces, pathService)
+        public Knight(
+            int position,
+            Color color,
+            List<Piece> pieces,
+            PathAvailabilityService pathService,
+            OccupiedPositionService occupyService
+            ) 
+            : base(position, color, pieces, pathService, occupyService)
         {
         }
 
         public override bool CanMoveTo(int newPosition)
         {
             return PathService.IsKnightPathAvailable(Position.Value, newPosition)
-                   && OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
+                   && OccupyService.DefaultStrategy(this, newPosition, Pieces);
         }
     }
 }

@@ -7,10 +7,21 @@ namespace Model.Pieces
 {
     public abstract class Piece
     {
+        public readonly Color Color;
+        
         protected readonly List<Piece> Pieces;
-        protected PathAvailabilityService PathService;
+        protected readonly PathAvailabilityService PathService;
+        protected readonly OccupiedPositionService OccupyService;
+        
+        public Maybe<int> Position { get; private set; }
+        public bool Captured => Position.Exists == false;
 
-        protected Piece(int position, Color color, List<Piece> pieces, PathAvailabilityService pathService)
+        protected Piece(
+            int position,
+            Color color,
+            List<Piece> pieces,
+            PathAvailabilityService pathService,
+            OccupiedPositionService occupyService)
         {
             if (position < 0)
                 throw new ArgumentOutOfRangeException(
@@ -19,12 +30,9 @@ namespace Model.Pieces
 
             Position = Maybe<int>.Yes(position);
             Color = color;
+            OccupyService = occupyService;
             PathService = pathService;
         }
-
-        public Maybe<int> Position { get; private set; }
-        public Color Color { get; }
-        public bool Captured => Position.Exists == false;
 
         public abstract bool CanMoveTo(int newPosition);
 

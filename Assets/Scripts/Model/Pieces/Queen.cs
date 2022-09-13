@@ -5,8 +5,14 @@ namespace Model.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(int position, Color color, List<Piece> pieces, PathAvailabilityService pathService)
-            : base(position, color, pieces, pathService)
+        public Queen(
+            int position,
+            Color color,
+            List<Piece> pieces,
+            PathAvailabilityService pathService,
+            OccupiedPositionService occupyService
+            )
+            : base(position, color, pieces, pathService, occupyService)
         {
         }
 
@@ -14,7 +20,7 @@ namespace Model.Pieces
         {
             return (PathService.IsStraightPathAvailable(Position.Value, newPosition, Pieces) ||
                     PathService.IsDiagonalPathAvailable(Position.Value, newPosition, Pieces)) &&
-                   OccupiedPositionStrategy.DefaultStrategy(this, newPosition, Pieces);
+                   OccupyService.DefaultStrategy(this, newPosition, Pieces);
         }
     }
 }

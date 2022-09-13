@@ -8,13 +8,13 @@ namespace Model.Pieces
         public readonly bool ForwardIsRight;
         public bool WasMoved { get; private set; }
 
-        public Pawn(
-            int position,
+        public Pawn(int position,
             Color color,
             List<Piece> pieces,
-            PathAvailabilityService pathService 
-        )
-            : base(position, color, pieces, pathService)
+            PathAvailabilityService pathService,
+            OccupiedPositionService occupyService
+            )
+            : base(position, color, pieces, pathService, occupyService)
         {
             ForwardIsRight = color == Color.White;
         }
@@ -22,7 +22,7 @@ namespace Model.Pieces
         public override bool CanMoveTo(int newPosition)
         {
             return PathService.IsPawnPathAvailable(Position.Value, newPosition, WasMoved, ForwardIsRight, Pieces) &&
-                   OccupiedPositionStrategy.PawnOccupyTarget(this, newPosition, Pieces);
+                   OccupyService.PawnOccupyTarget(this, newPosition, Pieces);
         }
 
         public override void MoveTo(int position)
