@@ -6,18 +6,23 @@ namespace Unity
 {
     public class GameApp : IGameObserver
     {
-        private const int BoardSize = 16;
-        
         private readonly InputService _inputService;
+        private readonly IConfigService _configService;
         private readonly Board _board;
         private readonly Player _humanPlayer;
         private readonly Hud _hud;
         private Game _gameModel;
         private bool _gameInProcess;
 
-        public GameApp(InputService inputService, Board board, Player humanPlayer, Hud hud)
+        public GameApp(
+            InputService inputService,
+            IConfigService configService,
+            Board board,
+            Player humanPlayer,
+            Hud hud)
         {
             _inputService = inputService;
+            _configService = configService;
             _board = board;
             _humanPlayer = humanPlayer;
             _hud = hud;
@@ -47,7 +52,7 @@ namespace Unity
         {
             _gameInProcess = true;
             
-            var boardModel = new Model.Board(BoardSize);
+            var boardModel = new Model.Board(_configService.BoardSize);
             _board.SetBoard(boardModel);
 
             _humanPlayer.JoinGame(boardModel.Whites);

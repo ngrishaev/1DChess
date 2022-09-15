@@ -32,12 +32,12 @@ namespace Unity
             CreatePieces(board.Pieces);
         }
 
-        public Maybe<Piece> GetPiece(Coordinate tap)
+        public Maybe<Piece> GetPiece(WorldPosition tap)
         {
             if(IsOnBoard(tap) == false)
                 return Maybe<Piece>.No();
 
-            var tapTilePosition = WorldPosToCell(tap.World.x);
+            var tapTilePosition = WorldPosToCell(tap.X);
             
             if(IsAnyAt(tapTilePosition) == false)
                 return Maybe<Piece>.No();
@@ -45,7 +45,7 @@ namespace Unity
             return Maybe<Piece>.Yes(_pieces.First( piece => piece.PieceData.Position.ValueEquals(tapTilePosition)));
         }
 
-        public bool IsOnBoard(Coordinate coordinate) => _bounds.IsOverlapInZ(coordinate.World);
+        public bool IsOnBoard(WorldPosition worldPosition) => _bounds.IsOverlapInZ(worldPosition);
 
         public int WorldPosToCell(float xPos) => Mathf.RoundToInt(0.5f * (_boardSizeInCells - 1) + xPos / _cellPrefab.Width);
         

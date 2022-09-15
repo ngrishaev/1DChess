@@ -10,14 +10,14 @@ namespace Model
         public List<Piece> Whites { get; } = new List<Piece>();
         public List<Piece> Pieces { get; } = new List<Piece>();
         public int Size { get; }
+        
         public Board(int size)
         {
             Size = size;
 
             var pathService = new PathAvailabilityService();
             var occupyService = new OccupiedPositionService();
-            
-            //TODO: factory?
+
             Whites = new()
             {
                 new King(0, Color.White, Pieces, pathService, occupyService),

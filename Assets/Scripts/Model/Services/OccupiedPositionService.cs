@@ -6,7 +6,6 @@ using Model.Pieces;
 
 namespace Model.Services
 {
-    // TODO: Refactor static
     public class OccupiedPositionService
     {
         public bool DefaultStrategy(Piece actor, int target, List<Piece> pieces) =>

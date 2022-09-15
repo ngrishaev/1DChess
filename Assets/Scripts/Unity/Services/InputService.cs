@@ -8,7 +8,7 @@ namespace Unity.Services
         private Camera _camera;
         public event Action OnRestart;
 
-        public event Action<Coordinate> OnTap;
+        public event Action<WorldPosition> OnTap;
 
         public void Construct(Camera camera)
         {
@@ -18,32 +18,26 @@ namespace Unity.Services
         private void Update()
         {
             if(Input.GetMouseButtonDown(0))
-                OnTap?.Invoke(Coordinate.FromScreen(Input.mousePosition, _camera));
+                OnTap?.Invoke(WorldPosition.FromScreen(Input.mousePosition, _camera));
             
             if(Input.GetKeyDown(KeyCode.R))
                 OnRestart?.Invoke();
         }
     }
-
-    public class Coordinate
+    
+    public class WorldPosition
     {
-        public Vector3 World { get; }
-        public Vector2 Screen { get; }
+        public float X => Position.x;
+        public float Y => Position.y;
+        public float Z => Position.z;
+        private Vector3 Position { get; }
 
-        private Coordinate(Vector3 world, Vector2 screen)
-        {
-            World = world;
-            Screen = screen;
-        }
+        private WorldPosition(Vector3 position) => 
+            Position = position;
 
-        public static Coordinate FromWorld(Vector3 position, Camera camera)
-        {
-            return new Coordinate(position, camera.WorldToScreenPoint(position));
-        }  
-        
-        public static Coordinate FromScreen(Vector3 position, Camera camera)
-        {
-            return new Coordinate(camera.ScreenToWorldPoint(position), position);
-        }  
+        public static WorldPosition FromScreen(Vector3 position, Camera camera) => 
+            new WorldPosition(camera.ScreenToWorldPoint(position));
+
+        public static implicit operator Vector3(WorldPosition pos) => pos.Position;
     }
 }

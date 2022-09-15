@@ -50,23 +50,23 @@ namespace Unity
         
         public bool KingCaptured() => _playerPieces.Any(piece => piece is King && piece.Captured);
 
-        private void TapHandler(Coordinate tapCoordinate)
+        private void TapHandler(WorldPosition tapWorldPosition)
         {
             if (WaitingForInput == false)
                 return;
             
-            if (_board.IsOnBoard(tapCoordinate) == false)
+            if (_board.IsOnBoard(tapWorldPosition) == false)
                 return;
 
             if (_selectedPiece.Exists)
-                HandleSelectionEnd(tapCoordinate);
+                HandleSelectionEnd(tapWorldPosition);
             else
-                HandleSelectionStart(tapCoordinate);
+                HandleSelectionStart(tapWorldPosition);
         }
 
-        private void HandleSelectionStart(Coordinate tapCoordinate)
+        private void HandleSelectionStart(WorldPosition tapWorldPosition)
         {
-            Maybe<Piece> selectedPiece = _board.GetPiece(tapCoordinate);
+            Maybe<Piece> selectedPiece = _board.GetPiece(tapWorldPosition);
             
             if(selectedPiece.Exists == false)
                 return;
@@ -84,10 +84,10 @@ namespace Unity
             Debug.Log($"Selected piece for {Name}");
         }
 
-        private void HandleSelectionEnd(Coordinate tapCoordinate)
+        private void HandleSelectionEnd(WorldPosition tapWorldPosition)
         {
-            var selectedTile = _board.WorldPosToCell(tapCoordinate.World.x);
-            var pieceOnTile = _board.GetPiece(tapCoordinate);
+            var selectedTile = _board.WorldPosToCell(tapWorldPosition.X);
+            var pieceOnTile = _board.GetPiece(tapWorldPosition);
 
             if (pieceOnTile.ValueEquals(_selectedPiece))
             {

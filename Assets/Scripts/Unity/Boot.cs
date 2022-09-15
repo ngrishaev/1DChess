@@ -7,6 +7,7 @@ namespace Unity
     public class Boot : MonoBehaviour
     {
         [SerializeField] private InputService _inputService;
+        [SerializeField] private ConfigService _configService;
         [SerializeField] private Camera _mainCamera;
         
         [Header("Prefabs")]
@@ -34,7 +35,7 @@ namespace Unity
 
             var hud = Instantiate(_hud);
             
-            return new GameApp(inputService, board, humanPlayer, hud);
+            return new GameApp(inputService, _configService, board, humanPlayer, hud);
         }
     }
 }
