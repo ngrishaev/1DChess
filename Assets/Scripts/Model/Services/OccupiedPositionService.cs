@@ -14,7 +14,6 @@ namespace Model.Services
                 .Any(piece => piece.Position.Value == target && piece.Color == actor.Color);
         
         public bool PawnOccupyTarget(Pawn pawn, int target, List<Piece> pieces) =>
-            // TODO: Asserts?
             Math.Abs(pawn.Position.Value - target) == 1
                 ? PawnOccupyClosest(pawn, pieces)
                 : PawnOccupySecond(pawn, pieces);
@@ -28,7 +27,6 @@ namespace Model.Services
             return !(nextPiece.Exists && nextPiece.Value.Color == pawn.Color);
         }
         
-        // TODO: TESTS!
         private static bool PawnOccupySecond(Pawn pawn, List<Piece> pieces)
         {
             var target = pawn.ForwardIsRight ? pawn.Position.Value + 2 : pawn.Position.Value - 2;
